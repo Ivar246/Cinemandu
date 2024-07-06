@@ -1,0 +1,21 @@
+POST http://localhost:3000/auth/signup
+
+
+### signup 
+POST  http://localhost:3000/auth/signup
+Content-Type: application/json
+
+{
+    "email":"ivar1456@gmail.com",
+    "password":"ivarstha",
+    "username":"Ravi Shrestha"
+}
+
+### signin 
+POST http://localhost:3000/auth/signup
+Content-Length: application/json
+
+{
+    "email": "ivar1456@gmail.com",
+    "password":"ivarstha"
+}
