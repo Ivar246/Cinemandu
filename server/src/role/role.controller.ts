@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Post, HttpCode, HttpStatus, Get } from '@nestjs/common';
+import { Controller, Param, Body, Post, HttpCode, HttpStatus, Get, Put, ParseIntPipe } from '@nestjs/common';
 import { RoleService } from './role.service';
 
 @Controller('role')
@@ -17,8 +17,11 @@ export class RoleController {
         return this.roleService.getAllRoles();
     }
 
-    updateRole() {
-
+    @HttpCode(HttpStatus.OK)
+    @Put("/update/:id")
+    updateRole(@Param("id", ParseIntPipe) roleId: number,
+        @Body("name") roleName: string) {
+        return this.roleService.updateRole(roleId, roleName)
     }
 
     deleteRole() {

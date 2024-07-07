@@ -20,7 +20,9 @@ export class RoleService {
                     throw new ConflictException('Role already exists');
                 }
             }
-            throw new InternalServerErrorException(error.message);
+            if (error.code === 500)
+                throw new InternalServerErrorException(error.message);
+            return error
         }
     }
 
@@ -32,12 +34,30 @@ export class RoleService {
 
             return { data: roles }
         } catch (error) {
-            throw new InternalServerErrorException(error.message)
+            if (error.code === 500)
+                throw new InternalServerErrorException(error.message)
+            return error
         }
     }
 
-    async updateRole() {
+    async updateRole(roleId: number, roleName: string) {
+        try {
+            const role = await this.prisma.role.findUnique({ where: { id: roleId } })
+            console.log(role)
+            if (!role) throw new NotFoundException("Role with the Id not found")
+            const updatedRole = await this.prisma.role.update({
+                where: { id: roleId },
+                data: {
+                    name: roleName
+                }
+            });
 
+            return { data: updatedRole, message: `Role with id ${roleId} updated successfully` }
+        } catch (error) {
+            if (error.code === 500)
+                throw new InternalServerErrorException(error.message)
+            return error
+        }
     }
 
     async deleteRole() {
