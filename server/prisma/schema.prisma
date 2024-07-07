@@ -19,4 +19,37 @@ model User {
   profile_url   String?
   email         String  @unique
   password_hash String
+
+  @@map("user")
+}
+
+model Artist {
+  id              Int           @id @default(autoincrement())
+  name            String
+  DOB             DateTime?
+  profile_url     String?
+  profile_summary String
+  height          Decimal?
+  Artist_Role     Artist_Role[]
+
+  @@map("artist")
+}
+
+model Role {
+  id          Int           @id @default(autoincrement())
+  name        String        @unique
+  Artist_Role Artist_Role[]
+
+  @@map("role")
+}
+
+model Artist_Role {
+  id        Int    @id @default(autoincrement())
+  artist_id Int
+  artist    Artist @relation(fields: [artist_id], references: [id])
+  role_id   Int
+  role      Role   @relation(fields: [role_id], references: [id])
+
+  @@unique([artist_id, role_id])
+  @@map("artist_role")
 }

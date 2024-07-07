@@ -19,3 +19,11 @@ Content-Length: application/json
     "email": "ivar1456@gmail.com",
     "password":"ivarstha"
 }
+
+### create role
+POST http://localhost:3000/role/create
+Content-Type: application/json
+
+{
+    "name":"actor"
+}
