@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Post, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Param, Body, Post, HttpCode, HttpStatus, Get } from '@nestjs/common';
 import { RoleService } from './role.service';
 
 @Controller('role')
@@ -11,8 +11,10 @@ export class RoleController {
         return this.roleService.createRole(roleName);
     }
 
-    getRoles() {
-
+    @HttpCode(HttpStatus.OK)
+    @Get("/getAllRoles")
+    getAllRoles() {
+        return this.roleService.getAllRoles();
     }
 
     updateRole() {

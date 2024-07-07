@@ -25,5 +25,8 @@ POST http://localhost:3000/role/create
 Content-Type: application/json
 
 {
-    "name":"actor"
+    "name":"producer"
 }
+
+### get roles
+GET  http://localhost:3000/role/getAllRoles
