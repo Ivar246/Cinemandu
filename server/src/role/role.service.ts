@@ -26,14 +26,12 @@ export class RoleService {
 
     async getAllRoles() {
         try {
-            throw new InternalServerErrorException("hi")
             const roles = await this.prisma.role.findMany();
 
             if (roles.length === 0) throw new NotFoundException("No roles available")
 
             return { data: roles }
         } catch (error) {
-
             throw new InternalServerErrorException(error.message)
         }
     }
