@@ -33,3 +33,14 @@ GET  http://localhost:3000/role/getAllRoles
 
 ### delete roles
 DELETE http://localhost:3000/role/delete/15
+
+### create artist
+POST http://localhost:3000/artist/create
+Content-Type: application/json
+
+{
+    "artist_name":"Tom hardy",
+    "DOB":"1970-1-5",
+    "profile_summary":"Tom Cruise is a well established actor in hollywood. He is the best action hero in hollywood/",
+    "roleIds":[1,2]
+}

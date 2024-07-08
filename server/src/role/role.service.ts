@@ -11,7 +11,7 @@ export class RoleService {
     async createRole(roleName: string) {
         try {
             const role = await this.prisma.role.create({
-                data: { name: roleName },
+                data: { role_name: roleName },
             });
             return { data: role, message: 'Role created' };
         } catch (error) {
@@ -48,7 +48,7 @@ export class RoleService {
             const updatedRole = await this.prisma.role.update({
                 where: { id: roleId },
                 data: {
-                    name: roleName
+                    role_name: roleName
                 }
             });
 

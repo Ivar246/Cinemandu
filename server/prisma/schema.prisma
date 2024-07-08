@@ -25,20 +25,20 @@ model User {
 
 model Artist {
   id              Int           @id @default(autoincrement())
-  name            String
+  artist_name     String
   DOB             DateTime?
   profile_url     String?
   profile_summary String
   height          Decimal?
-  Artist_Role     Artist_Role[]
+  roles           Artist_Role[]
 
   @@map("artist")
 }
 
 model Role {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  Artist_Role Artist_Role[]
+  id        Int           @id @default(autoincrement())
+  role_name String        @unique
+  artists   Artist_Role[]
 
   @@map("role")
 }
