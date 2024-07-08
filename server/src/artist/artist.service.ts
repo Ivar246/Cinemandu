@@ -26,7 +26,20 @@ export class ArtistService {
     }
 
     async getAllArtist() {
+        try {
+            const artists = await this.prisma.artist.findMany({
+                include: { roles: { include: { role: true } } }
+            });
 
+            const transformedResult = artists.map(artist => {
+                return { ...artist, roles: artist.roles.map(r => r.role) }
+            });
+
+            return { data: transformedResult, message: "Artists fetched successfully." }
+
+        } catch (error) {
+
+        }
     }
 
     async addArtist(addArtistDto: AddArtistDto) {

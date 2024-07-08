@@ -47,3 +47,7 @@ Content-Type: application/json
 
 ### get Single Artist
 GET http://localhost:3000/artist/3
+
+
+### get all Artist
+GET http://localhost:3000/artist/getAll
