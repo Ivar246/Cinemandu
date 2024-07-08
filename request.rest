@@ -44,3 +44,6 @@ Content-Type: application/json
     "profile_summary":"Tom Cruise is a well established actor in hollywood. He is the best action hero in hollywood/",
     "roleIds":[1,2]
 }
+
+### get Single Artist
+GET http://localhost:3000/artist/3

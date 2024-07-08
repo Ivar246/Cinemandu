@@ -1,15 +1,28 @@
-import { BadRequestException, HttpException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddArtistDto } from './dto/addArtist.dto';
 import { profile } from 'console';
-import { Artist_Role } from '@prisma/client';
+import { Artist_Role, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ArtistService {
 
     constructor(private prisma: PrismaService) { }
-    async getArtist() {
+    async getArtist(artist_id: number) {
+        try {
+            const artist = await this.prisma.artist.findUnique({
+                where: { id: artist_id },
+                include: { roles: { include: { role: true } } }
+            });
 
+            if (!artist) throw new NotFoundException(`artist with the id ${artist_id} not found`);
+
+            const result = { ...artist, roles: artist.roles.map(r => r.role) };
+
+            return { data: result, message: "artist fetched successfully" }
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
     }
 
     async getAllArtist() {
