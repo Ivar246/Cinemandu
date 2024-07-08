@@ -31,6 +31,8 @@ export class ArtistService {
                 include: { roles: { include: { role: true } } }
             });
 
+            if (artists.length === 0) throw new NotFoundException("Artists not available.")
+
             const transformedResult = artists.map(artist => {
                 return { ...artist, roles: artist.roles.map(r => r.role) }
             });
@@ -38,7 +40,7 @@ export class ArtistService {
             return { data: transformedResult, message: "Artists fetched successfully." }
 
         } catch (error) {
-
+            throw new InternalServerErrorException(error.message)
         }
     }
 
