@@ -1,4 +1,4 @@
-import { Controller, Param, Body, Post, HttpCode, HttpStatus, Get, Put, ParseIntPipe } from '@nestjs/common';
+import { Controller, Param, Body, Post, HttpCode, HttpStatus, Get, Put, Delete, ParseIntPipe } from '@nestjs/common';
 import { RoleService } from './role.service';
 
 @Controller('role')
@@ -24,7 +24,9 @@ export class RoleController {
         return this.roleService.updateRole(roleId, roleName)
     }
 
-    deleteRole() {
-
+    @HttpCode(HttpStatus.OK)
+    @Delete("/delete/:id")
+    deleteRole(@Param('id', ParseIntPipe) roleId: number) {
+        return this.roleService.deleteRole(roleId)
     }
 }

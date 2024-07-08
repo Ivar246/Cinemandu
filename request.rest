@@ -30,3 +30,6 @@ Content-Type: application/json
 
 ### get roles
 GET  http://localhost:3000/role/getAllRoles
+
+### delete roles
+DELETE http://localhost:3000/role/delete/15
