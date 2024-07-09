@@ -105,14 +105,20 @@ export class ArtistService {
                     throw new NotFoundException("Update failed! artist with the id not found");
             throw new InternalServerErrorException(error.message)
         }
-
-
-
-
     }
 
-    async deleteArtist() {
-
+    async deleteArtist(artist_id: number) {
+        try {
+            const artist = await this.prisma.artist.delete({
+                where: { id: artist_id }
+            });
+            return { data: artist, message: "Artist deleted successfully." }
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError)
+                if (error.code === 'P2025')
+                    throw new NotFoundException("Deletion failed! artist with the id not found.")
+            throw new InternalServerErrorException(error.message)
+        }
     }
 
 }

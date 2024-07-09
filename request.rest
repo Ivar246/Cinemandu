@@ -54,10 +54,14 @@ GET http://localhost:3000/artist/getAll
 
 
 ### update artist
-PUT http://localhost:3000/artist/update/200
+PUT http://localhost:3000/artist/update/3
 Content-Type: application/json
 
 {
     "artist_name":"William Jackson",
     "height": 132.0
 }
+
+### delete artist
+DELETE http://localhost:3000/artist/delete/6
+
