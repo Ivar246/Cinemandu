@@ -51,3 +51,13 @@ GET http://localhost:3000/artist/3
 
 ### get all Artist
 GET http://localhost:3000/artist/getAll
+
+
+### update artist
+PUT http://localhost:3000/artist/update/200
+Content-Type: application/json
+
+{
+    "artist_name":"William Jackson",
+    "height": 132.0
+}

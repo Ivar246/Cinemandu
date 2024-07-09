@@ -1,8 +1,7 @@
 import { BadRequestException, HttpException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddArtistDto } from './dto/addArtist.dto';
-import { profile } from 'console';
-import { Artist_Role, Prisma } from '@prisma/client';
+import { AddArtistDto, UpdateArtistDto } from './dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ArtistService {
@@ -90,7 +89,25 @@ export class ArtistService {
         }
     }
 
-    async updateArtist() {
+    async updateArtist(updateArtistDto: UpdateArtistDto, artist_id: number) {
+        try {
+            const updatedArtist = await this.prisma.artist.update({
+                where: { id: artist_id },
+                data: { ...updateArtistDto },
+                include: { roles: { include: { role: true } } }
+            });
+
+
+            return updatedArtist;
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError)
+                if (error.code === "P2025")
+                    throw new NotFoundException("Update failed! artist with the id not found");
+            throw new InternalServerErrorException(error.message)
+        }
+
+
+
 
     }
 
