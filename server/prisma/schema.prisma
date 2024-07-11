@@ -31,6 +31,7 @@ model Artist {
   profile_summary String
   height          Decimal?
   roles           Artist_Role[]
+  MovieArtist     MovieArtist[]
 
   @@map("artist")
 }
@@ -52,4 +53,30 @@ model Artist_Role {
 
   @@unique([artist_id, role_id])
   @@map("artist_role")
+}
+
+model Movie {
+  id            Int           @id @default(autoincrement())
+  title         String
+  released_date DateTime
+  runtime       Int
+  poster_url    String?
+  plot_summary  String?
+  released      Boolean
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  MovieArtist   MovieArtist[]
+
+  @@map("movie")
+}
+
+model MovieArtist {
+  id        Int    @id @default(autoincrement())
+  artist_id Int
+  movie_id  Int
+  artist    Artist @relation(fields: [artist_id], references: [id], onDelete: Cascade)
+  movie     Movie  @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+
+  @@unique([artist_id, movie_id])
+  @@map("movie_artist")
 }
