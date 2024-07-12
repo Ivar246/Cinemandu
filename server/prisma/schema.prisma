@@ -32,6 +32,7 @@ model Artist {
   height          Decimal?
   roles           Artist_Role[]
   MovieArtist     MovieArtist[]
+  gallery         Image[]
 
   @@map("artist")
 }
@@ -55,28 +56,66 @@ model Artist_Role {
   @@map("artist_role")
 }
 
+model Genre {
+  id         Int     @id @default(autoincrement())
+  genre_name String
+  movie      Movie[]
+}
+
 model Movie {
-  id            Int           @id @default(autoincrement())
-  title         String
-  released_date DateTime
-  runtime       Int
-  poster_url    String?
-  plot_summary  String?
-  released      Boolean
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
-  MovieArtist   MovieArtist[]
+  id             Int           @id @default(autoincrement())
+  title          String
+  released_date  DateTime
+  runtime        Int
+  poster_url     String?
+  plot_summary   String?
+  trailer_url    String?
+  full_movie_url String?
+  movie_type     String
+  audience       Audience?
+  format         Format?
+  isPublished    Boolean
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+  MovieArtist    MovieArtist[]
+  genre          Genre[]
+  gallery        Image[]
 
   @@map("movie")
 }
 
 model MovieArtist {
-  id        Int    @id @default(autoincrement())
-  artist_id Int
-  movie_id  Int
-  artist    Artist @relation(fields: [artist_id], references: [id], onDelete: Cascade)
-  movie     Movie  @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  id            Int      @id @default(autoincrement())
+  artist_id     Int
+  movie_id      Int
+  artist        Artist   @relation(fields: [artist_id], references: [id], onDelete: Cascade)
+  movie         Movie    @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  role_in_movie String[]
 
   @@unique([artist_id, movie_id])
   @@map("movie_artist")
+}
+
+model Image {
+  id        Int     @id @default(autoincrement())
+  url       String
+  artist_id Int?
+  artist    Artist? @relation(fields: [artist_id], references: [id])
+
+  movie_id Int?
+  movie    Movie? @relation(fields: [movie_id], references: [id])
+
+  @@map("image")
+}
+
+enum Audience {
+  CHILDREN
+  FAMILY
+  ADULT
+}
+
+enum Format {
+  FEATURE_FILM
+  SHORT_FILM
+  SERIAL
 }
