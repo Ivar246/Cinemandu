@@ -29,9 +29,7 @@ export class RoleService {
     async getAllRoles() {
         try {
             const roles = await this.prisma.role.findMany();
-
             if (roles.length === 0) throw new NotFoundException("No roles available")
-
             return { data: roles }
         } catch (error) {
             if (error.code === 500)
@@ -43,7 +41,6 @@ export class RoleService {
     async updateRole(roleId: number, roleName: string) {
         try {
             const role = await this.prisma.role.findUnique({ where: { id: roleId } })
-            console.log(role)
             if (!role) throw new NotFoundException("Role with the Id not found")
             const updatedRole = await this.prisma.role.update({
                 where: { id: roleId },
@@ -51,7 +48,6 @@ export class RoleService {
                     role_name: roleName
                 }
             });
-
             return { data: updatedRole, message: `Role with id ${roleId} updated successfully` }
         } catch (error) {
             if (error.code === 500)
