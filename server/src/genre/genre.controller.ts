@@ -1,5 +1,7 @@
 import { Controller, Param, Body, Post, HttpCode, HttpStatus, Get, Put, Delete, ParseIntPipe } from '@nestjs/common';
 import { GenreService } from './genre.service';
+import { CreateGenreDto } from './dto';
+import { UpdateGenreDto } from './dto';
 
 @Controller('genre')
 export class GenreController {
@@ -8,12 +10,12 @@ export class GenreController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post("/create")
-    createGenre(@Body() genre_name: string) {
-        return this.genreService.createGenre(genre_name);
+    createGenre(@Body() createGenreDto: CreateGenreDto) {
+        return this.genreService.createGenre(createGenreDto);
     }
 
     @HttpCode(HttpStatus.OK)
-    @Get("/getAllRoles")
+    @Get("/getAllGenre")
     getAllGenre() {
         return this.genreService.getAllGenre();
     }
@@ -21,8 +23,9 @@ export class GenreController {
     @HttpCode(HttpStatus.OK)
     @Put("/update/:id")
     updateGenre(@Param("id", ParseIntPipe) genreId: number,
-        @Body("name") genreName: string) {
-        return this.genreService.updateGenre(genreId, genreName);
+        @Body() updateGenreDto: UpdateGenreDto) {
+        console.log(updateGenreDto)
+        return this.genreService.updateGenre(genreId, updateGenreDto);
     }
 
     @HttpCode(HttpStatus.OK)
