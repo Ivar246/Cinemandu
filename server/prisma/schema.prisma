@@ -14,11 +14,13 @@ datasource db {
 }
 
 model User {
-  id            Int     @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   username      String
   profile_url   String?
-  email         String  @unique
+  email         String   @unique
   password_hash String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   @@map("user")
 }
@@ -33,14 +35,19 @@ model Artist {
   roles           Artist_Role[]
   MovieArtist     MovieArtist[]
   gallery         Image[]
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
 
   @@map("artist")
 }
 
 model Role {
-  id        Int           @id @default(autoincrement())
-  role_name String        @unique
-  artists   Artist_Role[]
+  id              Int               @id @default(autoincrement())
+  role_name       String            @unique
+  artists         Artist_Role[]
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  MovieArtistRole MovieArtistRole[]
 
   @@map("role")
 }
@@ -57,54 +64,69 @@ model Artist_Role {
 }
 
 model Genre {
-  id         Int     @id @default(autoincrement())
-  genre_name String  @unique
+  id         Int      @id @default(autoincrement())
+  genre_name String   @unique
   movie      Movie[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("genre")
 }
 
 model Movie {
-  id             Int           @id @default(autoincrement())
-  title          String
-  released_date  DateTime
-  runtime        Int
-  poster_url     String?
-  plot_summary   String?
-  trailer_url    String?
-  full_movie_url String?
-  movie_type     String
-  audience       Audience?
-  format         Format?
-  isPublished    Boolean
-  created_at     DateTime      @default(now())
-  updated_at     DateTime      @updatedAt
-  MovieArtist    MovieArtist[]
-  genre          Genre[]
-  gallery        Image[]
+  id               Int           @id @default(autoincrement())
+  title            String
+  released_date    DateTime
+  runtime          Int
+  poster_url       String?
+  plot_summary     String?
+  trailer_url      String?
+  full_movie_url   String?
+  movie_type       String
+  audience         Audience?
+  format           Format?
+  isPublished      Boolean
+  MovieArtist      MovieArtist[]
+  genre            Genre[]
+  production_house String?
+  gallery          Image[]
+  created_at       DateTime      @default(now())
+  updated_at       DateTime      @updatedAt
 
   @@map("movie")
 }
 
 model MovieArtist {
-  id            Int      @id @default(autoincrement())
-  artist_id     Int
-  movie_id      Int
-  artist        Artist   @relation(fields: [artist_id], references: [id], onDelete: Cascade)
-  movie         Movie    @relation(fields: [movie_id], references: [id], onDelete: Cascade)
-  role_in_movie String[]
+  id              Int               @id @default(autoincrement())
+  artist_id       Int
+  movie_id        Int
+  artist          Artist            @relation(fields: [artist_id], references: [id], onDelete: Cascade)
+  movie           Movie             @relation(fields: [movie_id], references: [id], onDelete: Cascade)
+  MovieArtistRole MovieArtistRole[]
 
   @@unique([artist_id, movie_id])
   @@map("movie_artist")
 }
 
+model MovieArtistRole {
+  id              Int         @id @default(autoincrement())
+  role_id         Int
+  role            Role        @relation(fields: [role_id], references: [id])
+  movie_artist_id Int
+  movie_artist    MovieArtist @relation(fields: [movie_artist_id], references: [id])
+
+  @@map("movie_artist_role")
+}
+
 model Image {
-  id        Int     @id @default(autoincrement())
-  url       String
-  artist_id Int?
-  artist    Artist? @relation(fields: [artist_id], references: [id])
-  movie_id  Int?
-  movie     Movie?  @relation(fields: [movie_id], references: [id])
+  id         Int      @id @default(autoincrement())
+  url        String
+  artist_id  Int?
+  artist     Artist?  @relation(fields: [artist_id], references: [id])
+  movie_id   Int?
+  movie      Movie?   @relation(fields: [movie_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   @@map("image")
 }
