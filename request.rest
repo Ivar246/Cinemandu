@@ -65,3 +65,27 @@ Content-Type: application/json
 ### delete artist
 DELETE http://localhost:3000/artist/delete/6
 
+
+### create genre
+POST http://localhost:3000/genre/create
+Content-Type: application/json
+
+{
+    "genre_name":"Drama"
+}
+
+### get all genres
+GET http://localhost:3000/genre/getAllGenre
+
+### update genre by id
+PUT http://localhost:3000/genre/update/1
+Content-Type: application/json
+
+{
+    "genre_name": "Drama"
+}
+
+### delete genre by id
+DELETE  http://localhost:3000/genre/delete/1
+
+

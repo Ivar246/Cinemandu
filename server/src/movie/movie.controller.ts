@@ -1,33 +1,63 @@
-import { Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Put, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { MovieService } from './movie.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { AddMovieDto } from './dto';
+import { Movie } from '@prisma/client';
+
+
+
 
 @Controller('movie')
 export class MovieController {
 
+    constructor(private movieService: MovieService) { }
     @Post('/create')
-    addMovie() {
-
+    @UseInterceptors(
+        FileInterceptor('poster', {
+            storage: diskStorage({
+                destination: './uploads/posters',
+                filename: (req, file, cb) => {
+                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                    cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+                },
+            }),
+            fileFilter: (req, file, cb) => {
+                if (!file.mimetype.startsWith('image')) {
+                    return cb(new Error('Only image files are allowed!'), false);
+                }
+                cb(null, true);
+            }
+        }),
+    )
+    addMovie(
+        @Body() addMovieDto: AddMovieDto,
+        @UploadedFile() poster: Express.Multer.File) {
+        const posterUrl = poster ? `/uploads/posters/${poster.filename}` : null;
+        return this.movieService.addMovie(addMovieDto, posterUrl);
     }
 
-    @Get('/getmovies')
-    getMovies() {
+    // @Get('/getmovies')
+    // getMovies() {
+    //     return this.movieService.getMovies();
+    // }
 
-    }
+    // @Get("/:id")
+    // getMovie() {
+    //     return this.movieService.getMovie();
+    // }
 
-    @Get("/:id")
-    getMovie() {
+    // @Put("/update/:id")
+    // updateMovie() {
+    //     return this.movieService.updateMovie();
+    // }
 
-    }
+    // @Delete('/delete/:id')
 
-    @Put("/update/:id")
-    updateMovie() {
-
-    }
-
-    @Delete('/delete/:id')
-
-    deleteMovie() {
-
-    }
+    // deleteMovie() {
+    //     return this.movieService.deleteMovie();
+    // }
 
 
 }
