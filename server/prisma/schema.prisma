@@ -82,7 +82,6 @@ model Movie {
   plot_summary     String?
   trailer_url      String?
   full_movie_url   String?
-  movie_type       String
   audience         Audience?
   format           Format?
   isPublished      Boolean
@@ -111,9 +110,9 @@ model MovieArtist {
 model MovieArtistRole {
   id              Int         @id @default(autoincrement())
   role_id         Int
-  role            Role        @relation(fields: [role_id], references: [id])
+  role            Role        @relation(fields: [role_id], references: [id], onDelete: Cascade)
   movie_artist_id Int
-  movie_artist    MovieArtist @relation(fields: [movie_artist_id], references: [id])
+  movie_artist    MovieArtist @relation(fields: [movie_artist_id], references: [id], onDelete: Cascade)
 
   @@map("movie_artist_role")
 }
