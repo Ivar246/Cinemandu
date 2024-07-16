@@ -97,16 +97,66 @@ export class MovieService {
                                 include: {
                                     role: true,
                                 }
-                            }
+                            },
+                            artist: true
                         }
                     },
                     genre: true
                 }
             });
 
+
             return { data: movie, message: 'Movie created successfully.' };
         } catch (error) {
             throw new BadRequestException(error.message);
         }
     }
+
+    async getMovies() {
+        try {
+            const movies = await this.prisma.movie.findMany({
+                include: {
+                    genre: true,
+                    MovieArtist: {
+                        include: {
+                            artist: true,
+                            MovieArtistRole: {
+                                include: {
+                                    role: true
+                                }
+                            }
+                        }
+                    }
+
+                },
+            });
+            const filteredMovie = movies.map(movie => {
+                return {
+                    ...movie,
+                    genre: movie.genre.map(g => ({ id: g.id, genre_name: g.genre_name })),
+                    MovieArtist: movie.MovieArtist.map(ma => {
+                        return {
+                            artist: {
+                                id: ma.artist.id,
+                                artist_name: ma.artist.artist_name
+                            },
+                            roleInMovie: ma.MovieArtistRole.map(mar => ({ id: mar.role.id, role_name: mar.role.role_name }))
+                        };
+                    }),
+                    producer: movie.MovieArtist.map(ma => {
+                        const producerIndex = ma.MovieArtistRole.findIndex(mar => mar.role.role_name === "producer");
+                        if (producerIndex)
+                            return ma.artist.artist_name;
+                    })
+                }
+            });
+
+            if (movies.length === 0) throw new NotFoundException('No movies found');
+
+            return { data: filteredMovie, message: "Movies fetched successfully." };
+        } catch (error) {
+            throw new BadRequestException(error.message);
+        }
+    }
+
 }

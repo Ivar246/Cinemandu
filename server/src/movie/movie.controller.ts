@@ -38,10 +38,10 @@ export class MovieController {
         return this.movieService.addMovie(addMovieDto, posterUrl);
     }
 
-    // @Get('/getmovies')
-    // getMovies() {
-    //     return this.movieService.getMovies();
-    // }
+    @Get('/getmovies')
+    getMovies() {
+        return this.movieService.getMovies();
+    }
 
     // @Get("/:id")
     // getMovie() {
