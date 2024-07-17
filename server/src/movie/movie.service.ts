@@ -130,6 +130,7 @@ export class MovieService {
 
                 },
             });
+
             const filteredMovie = movies.map(movie => {
                 return {
                     ...movie,
@@ -145,6 +146,7 @@ export class MovieService {
                     }),
                     producer: movie.MovieArtist.map(ma => {
                         const producerIndex = ma.MovieArtistRole.findIndex(mar => mar.role.role_name === "producer");
+                        console.log(producerIndex)
                         if (producerIndex)
                             return ma.artist.artist_name;
                     })

@@ -114,6 +114,7 @@ model MovieArtistRole {
   movie_artist_id Int
   movie_artist    MovieArtist @relation(fields: [movie_artist_id], references: [id], onDelete: Cascade)
 
+  @@unique([role_id, movie_artist_id])
   @@map("movie_artist_role")
 }
 
