@@ -19,6 +19,7 @@ model User {
   profile_url   String?
   email         String   @unique
   password_hash String
+  user_role     UserRole @default(USER)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
 
@@ -141,4 +142,9 @@ enum Format {
   FEATURE_FILM
   SHORT_FILM
   SERIAL
+}
+
+enum UserRole {
+  USER
+  ADMIN
 }
