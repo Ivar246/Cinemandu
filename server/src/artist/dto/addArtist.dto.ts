@@ -13,12 +13,11 @@ export class AddArtistDto {
 
     @IsString()
     @IsOptional()
-    profile_url: string
-
-    @IsString()
-    @IsOptional()
     profile_summary: string
 
+    @Transform(({ value }) => {
+        return typeof value === 'string' ? JSON.parse(value) : value;
+    })
     @IsOptional()
     @IsInt({ each: true })
     roleIds: number[]

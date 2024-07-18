@@ -43,8 +43,8 @@ export class ArtistService {
         }
     }
 
-    async addArtist(addArtistDto: AddArtistDto) {
-        const { artist_name, DOB, profile_url, profile_summary, roleIds } = addArtistDto;
+    async addArtist(addArtistDto: AddArtistDto, profileimg_url_) {
+        const { artist_name, DOB, profile_summary, roleIds } = addArtistDto;
 
         try {
             const roles = await this.prisma.role.findMany({
@@ -60,7 +60,7 @@ export class ArtistService {
                 data: {
                     artist_name: artist_name,
                     DOB,
-                    profile_url,
+                    profile_url: profileimg_url_,
                     profile_summary,
                     roles: {
                         create: roles.map((r) => ({ role: { connect: { id: r.id } } }))

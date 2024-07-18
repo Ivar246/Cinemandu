@@ -1,6 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ArtistService } from './artist.service';
+
 import { AddArtistDto, UpdateArtistDto } from './dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('artist')
 export class ArtistController {
@@ -24,8 +28,27 @@ export class ArtistController {
 
     @HttpCode(HttpStatus.CREATED)
     @Post("/create")
-    addArtist(@Body() addArtistDto: AddArtistDto) {
-        return this.artistService.addArtist(addArtistDto);
+    @UseInterceptors(
+        FileInterceptor('profile_img', {
+            storage: diskStorage({
+                destination: './uploads/artists_profile',
+                filename: (req, file, cb) => {
+                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+                    cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+                },
+            }),
+            fileFilter: (req, file, cb) => {
+                if (!file.mimetype.startsWith('image')) {
+                    return cb(new Error('Only image files are allowed!'), false);
+                }
+                cb(null, true);
+            }
+        }),
+    )
+    addArtist(@Body() addArtistDto: AddArtistDto,
+        @UploadedFile() file: Express.Multer.File) {
+        const profile_img_url = `/uploads/artist_profile/${file.filename}`
+        return this.artistService.addArtist(addArtistDto, profile_img_url);
     }
 
     @HttpCode(HttpStatus.OK)
