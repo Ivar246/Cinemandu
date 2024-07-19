@@ -1,18 +1,19 @@
-import { Controller, Delete, Get, Post, Put, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Ip, Delete, Get, Post, Put, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { AddMovieDto } from './dto';
-import { Movie } from '@prisma/client';
-
-
+import { LoggerService } from '../logger/logger.service';
+import { Movie } from '@mui/icons-material';
 
 
 @Controller('movie')
 export class MovieController {
 
     constructor(private movieService: MovieService) { }
+    private logger = new LoggerService(MovieController.name)
+
     @Post('/create')
     @UseInterceptors(
         FileInterceptor('poster', {
@@ -39,7 +40,8 @@ export class MovieController {
     }
 
     @Get('/getmovies')
-    getMovies() {
+    getMovies(@Ip() ip: string) {
+        this.logger.log(`fetching movies from ${ip}`, MovieController.name);
         return this.movieService.getMovies();
     }
 
