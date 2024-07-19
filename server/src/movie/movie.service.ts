@@ -144,12 +144,10 @@ export class MovieService {
                             roleInMovie: ma.MovieArtistRole.map(mar => ({ id: mar.role.id, role_name: mar.role.role_name }))
                         };
                     }),
-                    producer: movie.MovieArtist.map(ma => {
-                        const producerIndex = ma.MovieArtistRole.findIndex(mar => mar.role.role_name === "producer");
-                        console.log(producerIndex)
-                        if (producerIndex)
-                            return ma.artist.artist_name;
-                    })
+                    producers: movie.MovieArtist.filter(ma => ma.MovieArtistRole.some(mar => mar.role.role_name === "producer"))
+                        .map(ma => ma.artist.artist_name),
+                    directors: movie.MovieArtist.filter(ma => ma.MovieArtistRole.some(mar => mar.role.role_name === "director"))
+                        .map(ma => ma.artist.artist_name)
                 }
             });
 

@@ -25,7 +25,7 @@ POST http://localhost:3000/role/create
 Content-Type: application/json
 
 {
-    "name":"producer"
+    "name":"cinematographer"
 }
 
 ### get roles
@@ -63,7 +63,7 @@ Content-Type: application/json
 }
 
 ### delete artist
-DELETE http://localhost:3000/artist/delete/6
+DELETE http://localhost:3000/artist/delete/2
 
 
 ### create genre
@@ -71,7 +71,7 @@ POST http://localhost:3000/genre/create
 Content-Type: application/json
 
 {
-    "genre_name":"Drama"
+    "genre_name":"Anime"
 }
 
 ### get all genres
