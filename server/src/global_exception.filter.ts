@@ -12,8 +12,8 @@ type MyResponseObj = {
 }
 
 @Catch()
-export class AllExceptionsFilter extends BaseExceptionFilter {
-    private readonly logger = new LoggerService(AllExceptionsFilter.name)
+export class GlobalExceptionsFilter extends BaseExceptionFilter {
+    private readonly logger = new LoggerService(GlobalExceptionsFilter.name)
 
     catch(exception: unknown, host: ArgumentsHost) {
         const ctx = host.switchToHttp();
@@ -43,7 +43,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
             .status(myResponseObj.statusCode)
             .json(myResponseObj)
 
-        this.logger.error(myResponseObj.response, AllExceptionsFilter.name)
+        this.logger.error(myResponseObj.response, GlobalExceptionsFilter.name)
 
         super.catch(exception, host)
     }

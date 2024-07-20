@@ -47,9 +47,12 @@ export class MovieService {
             format,
             isPublished,
             genreIds,
-            artistIds,
+            artists,
             production_house
         } = createMovieDto;
+
+        const artistIds = artists.map(a => a.artist_id)
+
 
         const aud = this.stringToAudience(audience);
         if (!aud) throw new BadRequestException("undefined is not assignable to type Audience");
@@ -87,7 +90,10 @@ export class MovieService {
                         connect: fetchedGenres,
                     },
                     MovieArtist: {
-                        create: artistIds.map(a => ({ artist: { connect: { id: a } } }))
+                        create: artists.map(a => ({
+                            artist: { connect: { id: a.artist_id } },
+                            MovieArtistRole: { create: a.role_ids.map(rid => ({ role: { connect: { id: rid } } })) }
+                        }))
                     }
                 },
                 include: {

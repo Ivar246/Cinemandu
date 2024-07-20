@@ -1,6 +1,10 @@
 import { IsString, IsOptional, IsDate, IsInt, IsBoolean, IsArray, IsUrl, IsNotEmpty } from 'class-validator';
 import { Type, Transform } from 'class-transformer';
 
+type ArtistDetail = {
+    artist_id: number
+    role_ids: number[]
+}
 
 export class AddMovieDto {
     @IsNotEmpty()
@@ -54,7 +58,7 @@ export class AddMovieDto {
     })
     @IsOptional()
     @IsArray()
-    artistIds: number[];
+    artists: ArtistDetail[]
 
 
     @IsOptional()
