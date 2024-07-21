@@ -22,6 +22,7 @@ model User {
   user_role     UserRole @default(USER)
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
+  Rating        Rating[]
 
   @@map("user")
 }
@@ -93,6 +94,7 @@ model Movie {
   gallery          Image[]
   created_at       DateTime      @default(now())
   updated_at       DateTime      @updatedAt
+  Rating           Rating[]
 
   @@unique([title, released_date])
   @@map("movie")
@@ -132,6 +134,18 @@ model Image {
   updated_at DateTime @updatedAt
 
   @@map("image")
+}
+
+model Rating {
+  id       Int   @id @default(autoincrement())
+  rate     Int
+  user_id  Int
+  user     User  @relation(fields: [user_id], references: [id])
+  movie_id Int
+  movie    Movie @relation(fields: [movie_id], references: [id])
+
+  @@unique([user_id, movie_id])
+  @@map("rating")
 }
 
 enum Audience {
