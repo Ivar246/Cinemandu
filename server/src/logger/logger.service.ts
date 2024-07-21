@@ -11,25 +11,26 @@ export class LoggerService extends ConsoleLogger {
             timeStyle: 'short',
             timeZone: 'Asia/Katmandu',
         }).format(new Date())}\t${entry}\n`;
-        console.log("dirname", __dirname)
         try {
             if (!fs.existsSync(path.join(__dirname, '..', '..', 'logs'))) {
                 await fsPromises.mkdir(path.join(__dirname, '..', '..', 'logs'))
             }
             await fsPromises.appendFile(path.join(__dirname, '..', '..', 'logs', 'myLogFile.log'), formattedEntry)
+
         } catch (e) {
             if (e instanceof Error) console.error(e.message)
         }
     }
     log(message: any, context?: string) {
         const entry = `${context}\t${message}`;
-        console.log(entry, "entry")
         this.logToFile(entry);
         super.log(message, context)
     }
 
     error(message: any, stackOrContext?: string) {
-        const entry = `${message}/${stackOrContext}`
+        const stringMessage = JSON.stringify(message);
+        console.log(stringMessage)
+        const entry = `${stringMessage}/${stackOrContext}`
         this.logToFile(entry);
         super.error(message, stackOrContext);
     }
