@@ -1,11 +1,10 @@
-import { Controller, Ip, Delete, Get, Post, Put, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Ip, Delete, Get, Post, Put, Body, UseInterceptors, UploadedFile, Param, ParseIntPipe } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { AddMovieDto } from './dto';
 import { LoggerService } from '../logger/logger.service';
-import { Movie } from '@mui/icons-material';
 
 
 @Controller('movie')
@@ -45,21 +44,21 @@ export class MovieController {
         return this.movieService.getMovies();
     }
 
-    // @Get("/:id")
-    // getMovie() {
-    //     return this.movieService.getMovie();
-    // }
+    @Get("/:id")
+    getMovie(@Param('id', ParseIntPipe) movieid: number) {
+        return this.movieService.getMovie(movieid);
+    }
 
     // @Put("/update/:id")
     // updateMovie() {
     //     return this.movieService.updateMovie();
     // }
 
-    // @Delete('/delete/:id')
+    @Delete('/delete/:id')
 
-    // deleteMovie() {
-    //     return this.movieService.deleteMovie();
-    // }
+    deleteMovie(@Param('id', ParseIntPipe) movie_id: number) {
+        return this.movieService.deleteMovie(movie_id);
+    }
 
 
 }

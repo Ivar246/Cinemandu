@@ -58,6 +58,7 @@ export class AddMovieDto {
     })
     @IsOptional()
     @IsArray()
+    @IsNotEmpty({ each: true })
     artists: ArtistDetail[]
 
 

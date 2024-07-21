@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, HttpException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddMovieDto } from './dto';
 import { Audience, Format, Genre, Movie } from '@prisma/client';
@@ -64,7 +64,7 @@ export class MovieService {
             where: { id: { in: genreIds } },
             select: { id: true }
         })
-        if (fetchedGenres.length !== genreIds.length) throw new BadRequestException("Some roles doesn't exist");
+        if (fetchedGenres.length !== genreIds.length) throw new BadRequestException("Some genres doesn't exist");
 
         const fetchedArtists = await this.prisma.artist.findMany({
             where: { id: { in: artistIds } },
@@ -72,6 +72,7 @@ export class MovieService {
         });
 
         if (fetchedArtists.length !== artistIds.length) throw new BadRequestException("some artist doesn't exist");
+
         try {
             const movie = await this.prisma.movie.create({
                 data: {
@@ -114,7 +115,7 @@ export class MovieService {
 
             return { data: movie, message: 'Movie created successfully.' };
         } catch (error) {
-            throw new BadRequestException(error.message);
+            throw error;
         }
     }
 
@@ -161,8 +162,68 @@ export class MovieService {
 
             return { data: filteredMovie, message: "Movies fetched successfully." };
         } catch (error) {
-            throw new BadRequestException(error.message);
+            console.log(error)
+            throw error;
         }
     }
 
+    async getMovie(movieid: number) {
+        try {
+            const movie = await this.prisma.movie.findUnique({
+                where: { id: movieid },
+                include: {
+                    genre: true,
+                    MovieArtist: {
+                        include: {
+                            artist: true,
+                            MovieArtistRole: {
+                                include: {
+                                    role: true
+                                }
+                            }
+                        }
+                    }
+
+                },
+            });
+
+            if (!movie) throw new NotFoundException('movie with the id not found.')
+            const filteredData = {
+                ...movie,
+                genre: movie.genre.map(g => ({ id: g.id, genre_name: g.genre_name })),
+                MovieArtist: movie.MovieArtist.map(ma => {
+                    return {
+                        artist: {
+                            id: ma.artist.id,
+                            artist_name: ma.artist.artist_name
+                        },
+                        roleInMovie: ma.MovieArtistRole.map(mar => ({ id: mar.role.id, role_name: mar.role.role_name }))
+                    };
+                }),
+                producers: movie.MovieArtist.filter(ma => ma.MovieArtistRole.some(mar => mar.role.role_name === "producer"))
+                    .map(ma => ma.artist.artist_name),
+                directors: movie.MovieArtist.filter(ma => ma.MovieArtistRole.some(mar => mar.role.role_name === "director"))
+                    .map(ma => ma.artist.artist_name)
+            }
+
+            return { data: filteredData, message: 'movie fetched successfully' };
+
+        } catch (error) {
+            throw new HttpException(error.message, error.statusCode);
+        }
+    }
+
+    async deleteMovie(movie_id: number) {
+        try {
+            const movie = await this.prisma.movie.delete({
+                where: {
+                    id: movie_id
+                }
+            });
+            return { data: movie, message: "movie has been deleted successfully." }
+        } catch (error) {
+            throw error;
+        }
+    }
 }
+

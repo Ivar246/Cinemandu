@@ -91,3 +91,6 @@ DELETE  http://localhost:3000/genre/delete/1
 ### get all movie
 GET  http://localhost:3000/movie/getMovies
 
+### delete movie by id
+DELETE http://localhost:3000/movie/delete/1
+
