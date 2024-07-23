@@ -94,3 +94,7 @@ GET  http://localhost:3000/movie/getMovies
 ### delete movie by id
 DELETE http://localhost:3000/movie/delete/1
 
+
+### user rate a movie 
+POST http://localhost:3000/rating/create
+

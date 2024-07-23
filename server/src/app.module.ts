@@ -7,6 +7,7 @@ import { RoleModule } from './role/role.module';
 import { MovieModule } from './movie/movie.module';
 import { GenreModule } from './genre/genre.module';
 import { LoggerModule } from './logger/logger.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [ConfigModule.forRoot({ isGlobal: true }),
@@ -16,6 +17,7 @@ import { LoggerModule } from './logger/logger.module';
     RoleModule,
     MovieModule,
     GenreModule,
-    LoggerModule],
+    LoggerModule,
+    RatingModule],
 })
 export class AppModule { }

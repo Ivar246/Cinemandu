@@ -29,7 +29,6 @@ export class LoggerService extends ConsoleLogger {
 
     error(message: any, stackOrContext?: string) {
         const stringMessage = JSON.stringify(message);
-        console.log(stringMessage)
         const entry = `${stringMessage}/${stackOrContext}`
         this.logToFile(entry);
         super.error(message, stackOrContext);

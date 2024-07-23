@@ -55,10 +55,7 @@ export class MovieController {
     // }
 
     @Delete('/delete/:id')
-
     deleteMovie(@Param('id', ParseIntPipe) movie_id: number) {
         return this.movieService.deleteMovie(movie_id);
     }
-
-
 }
