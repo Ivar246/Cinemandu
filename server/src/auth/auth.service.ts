@@ -33,7 +33,7 @@ export class AuthService {
 
         }
         catch (error) {
-            return { message: error };
+            throw error;
         }
     }
 

@@ -5,15 +5,21 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { AddMovieDto } from './dto';
 import { LoggerService } from '../logger/logger.service';
+import {
+    ApiBearerAuth,
+    ApiOperation,
+    ApiResponse,
+    ApiTags
+} from '@nestjs/swagger';
 
-
+@ApiTags("movies")
 @Controller('movie')
 export class MovieController {
 
     constructor(private movieService: MovieService) { }
     private logger = new LoggerService(MovieController.name)
 
-    @Post('/create')
+
     @UseInterceptors(
         FileInterceptor('poster', {
             storage: diskStorage({
@@ -31,6 +37,9 @@ export class MovieController {
             }
         }),
     )
+    @Post("/create")
+    @ApiOperation({ summary: 'Add a new movie' })
+    @ApiResponse({ status: 201, description: 'new movie added successfully.' })
     addMovie(
         @Body() addMovieDto: AddMovieDto,
         @UploadedFile() poster: Express.Multer.File) {
@@ -39,6 +48,8 @@ export class MovieController {
     }
 
     @Get('/getmovies')
+    @ApiOperation({ summary: 'fetching all movies' })
+    @ApiResponse({ status: 200, description: 'movies fetched successfully.' })
     getMovies(@Ip() ip: string) {
         this.logger.log(`fetching movies from ${ip}`, MovieController.name);
         return this.movieService.getMovies();
@@ -55,6 +66,8 @@ export class MovieController {
     // }
 
     @Delete('/delete/:id')
+    @ApiOperation({ summary: 'delete a movie by id' })
+    @ApiResponse({ status: 200, description: 'movie deleted successfully.' })
     deleteMovie(@Param('id', ParseIntPipe) movie_id: number) {
         return this.movieService.deleteMovie(movie_id);
     }
