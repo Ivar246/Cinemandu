@@ -8,9 +8,14 @@ import { MovieModule } from './movie/movie.module';
 import { GenreModule } from './genre/genre.module';
 import { LoggerModule } from './logger/logger.module';
 import { RatingModule } from './rating/rating.module';
+import { ThrottlerModule } from "@nestjs/throttler"
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }),
+  imports: [ThrottlerModule.forRoot([{
+    ttl: 60000,
+    limit: 10
+  }]),
+  ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     PrismaModule,
     ArtistModule,
@@ -19,5 +24,11 @@ import { RatingModule } from './rating/rating.module';
     GenreModule,
     LoggerModule,
     RatingModule],
-})
+  providers: [
+    {
+
+    }
+  ]
+},
+)
 export class AppModule { }
