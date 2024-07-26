@@ -6,17 +6,17 @@ POST  http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-    "email":"ivar1456@gmail.com",
+    "email":"ivarstha@gmail.com",
     "password":"ivarstha",
     "username":"Ravi Shrestha"
 }
 
 ### signin 
-POST http://localhost:3000/auth/signup
-Content-Length: application/json
+POST http://localhost:3000/auth/login
+Content-Type: application/json
 
 {
-    "email": "ivar1456@gmail.com",
+    "email":"ivarstha@gmail.com",
     "password":"ivarstha"
 }
 
@@ -39,7 +39,7 @@ POST http://localhost:3000/artist/create
 Content-Type: application/json
 
 {
-    "artist_name":"Tom hardy",
+    "artist_name":"Tom hundered",
     "DOB":"1970-1-5",
     "profile_summary":"Tom Cruise is a well established actor in hollywood. He is the best action hero in hollywood/",
     "roleIds":[1,2]

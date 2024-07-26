@@ -7,7 +7,9 @@ import {
     ApiResponse,
     ApiTags
 } from '@nestjs/swagger';
+import { Public } from '../common/decorator';
 
+@Public()
 @ApiTags("auth")
 @Controller('auth')
 export class AuthController {

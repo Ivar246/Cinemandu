@@ -8,7 +8,9 @@ import { MovieModule } from './movie/movie.module';
 import { GenreModule } from './genre/genre.module';
 import { LoggerModule } from './logger/logger.module';
 import { RatingModule } from './rating/rating.module';
-import { ThrottlerModule } from "@nestjs/throttler"
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler"
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './common/guard';
 
 @Module({
   imports: [ThrottlerModule.forRoot([{
@@ -26,7 +28,12 @@ import { ThrottlerModule } from "@nestjs/throttler"
     RatingModule],
   providers: [
     {
-
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard
     }
   ]
 },
