@@ -25,7 +25,7 @@ export class GalleryController {
         return this.galleryService.uploadImageGallery(filePaths, movie_id, entityTypeDto.entity);
     }
 
-    @Delete("/:id")
+    @Delete("/image/:id")
     deleteImageById(@Param('id', ParseIntPipe) id: number) {
         return this.galleryService.deleteImageFromGallery(id);
     }
