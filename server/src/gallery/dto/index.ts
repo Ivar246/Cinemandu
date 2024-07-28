@@ -1,1 +1,1 @@
-export * from "./imageUpload.dto"
+export * from "./entityType.dto"

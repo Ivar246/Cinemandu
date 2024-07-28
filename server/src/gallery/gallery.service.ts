@@ -23,7 +23,7 @@ export class GalleryService {
                     },
 
                 });
-                return { data: { ...upload, gallery: upload.gallery.map(img => img.url) }, message: "Images uploaded successfully" }
+                return { data: { ...upload, gallery: upload.gallery.map(img => ({ id: img.id, url: img.url })) }, message: "Images uploaded successfully" }
             }
             else {
                 const upload = await this.prisma.artist.update({
@@ -40,11 +40,15 @@ export class GalleryService {
                     }
                 });
 
-                return { data: { ...upload, gallery: upload.gallery.map(img => img.url) }, message: "artist image uploaded successfully" };
+                return { data: { ...upload, gallery: upload.gallery.map(img => ({ id: img.id, url: img.url })) }, message: "artist image uploaded successfully" };
 
             }
         } catch (error) {
             throw error;
         }
+    }
+
+    async deleteImageFromGallery(id: number, entity: EntityTypeDto) {
+
     }
 }
