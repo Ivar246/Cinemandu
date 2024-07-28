@@ -2,6 +2,7 @@ import { Catch, ArgumentsHost, HttpStatus, HttpException } from "@nestjs/common"
 import { BaseExceptionFilter } from "@nestjs/core";
 import { Request, Response } from 'express'
 import { LoggerService } from "../../logger/logger.service";
+import { MulterError } from "multer";
 import { PrismaClientKnownRequestError, PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 type MyResponseObj = {
@@ -27,7 +28,6 @@ export class GlobalExceptionsFilter extends BaseExceptionFilter {
             response: '',
         }
 
-        // Add more Prisma Error Types if you want
         if (exception instanceof HttpException) {
             myResponseObj.statusCode = exception.getStatus()
             myResponseObj.response = exception.getResponse()
@@ -38,13 +38,15 @@ export class GlobalExceptionsFilter extends BaseExceptionFilter {
             if (exception.code === "P2025")
                 myResponseObj.statusCode = 404;
             myResponseObj.response = exception.message;
+        } else if (exception instanceof MulterError) {
+            myResponseObj.statusCode = HttpStatus.BAD_REQUEST;
+            myResponseObj.response = exception.message;
         }
 
         else {
             myResponseObj.statusCode = HttpStatus.INTERNAL_SERVER_ERROR
             myResponseObj.response = 'Internal Server Error'
         }
-
 
         response
             .status(myResponseObj.statusCode)
