@@ -11,6 +11,7 @@ import { RatingModule } from './rating/rating.module';
 import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler"
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guard';
+import { GalleryModule } from './gallery/gallery.module';
 
 @Module({
   imports: [ThrottlerModule.forRoot([{
@@ -25,7 +26,8 @@ import { AtGuard } from './common/guard';
     MovieModule,
     GenreModule,
     LoggerModule,
-    RatingModule],
+    RatingModule,
+    GalleryModule],
   providers: [
     {
       provide: APP_GUARD,
@@ -35,7 +37,7 @@ import { AtGuard } from './common/guard';
       provide: APP_GUARD,
       useClass: AtGuard
     }
-  ]
+  ],
 },
 )
 export class AppModule { }
