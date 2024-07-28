@@ -1,4 +1,4 @@
-import { Controller, Param, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Param, ParseIntPipe, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { multerOptions } from 'src/utils';
 import { GalleryService } from './gallery.service';
@@ -23,5 +23,10 @@ export class GalleryController {
         @UploadedFiles() files: Array<Express.Multer.File>) {
         const filePaths = files.map(file => file.path);
         return this.galleryService.uploadImageGallery(filePaths, movie_id, entityTypeDto.entity);
+    }
+
+    @Delete("/:id")
+    deleteImageById(@Param('id', ParseIntPipe) id: number) {
+        return this.galleryService.deleteImageFromGallery(id);
     }
 }

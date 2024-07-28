@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { EntityTypeDto } from './dto';
 
 @Injectable()
 export class GalleryService {
@@ -48,7 +47,16 @@ export class GalleryService {
         }
     }
 
-    async deleteImageFromGallery(id: number, entity: EntityTypeDto) {
+    async deleteImageFromGallery(img_id: number) {
+        try {
+            const image = await this.prisma.image.delete({
+                where: { id: img_id }
+            });
+
+            return { data: { deletedImage: image }, message: "image successfully deleted" }
+        } catch (error) {
+            throw error;
+        }
 
     }
 }
