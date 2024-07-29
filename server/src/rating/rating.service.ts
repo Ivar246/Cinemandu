@@ -24,7 +24,27 @@ export class RatingService {
                 },
             });
 
-            return { message: "movie has been rated successfully" }
+            return { data: { rateTitle: { rating: { value: rating.rate } } }, message: "movie has been rated successfully" }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async updateRating(user_id: number, movie_id: number, rate: number) {
+        try {
+            const updatedRating = await this.prisma.rating.update({
+                where: {
+                    user_id_movie_id: {
+                        user_id: user_id,
+                        movie_id: movie_id
+                    }
+                },
+                data: {
+                    rate: rate
+                }
+            });
+
+            return { data: { rateTitle: { rating: { value: updatedRating.rate } } }, message: "rating updated successfully" };
         } catch (error) {
             throw error;
         }
