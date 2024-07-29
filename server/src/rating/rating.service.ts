@@ -1,6 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ForbiddenException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateRatingDto } from './dto';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class RatingService {
@@ -47,6 +48,25 @@ export class RatingService {
             return { data: { rateTitle: { rating: { value: updatedRating.rate } } }, message: "rating updated successfully" };
         } catch (error) {
             throw error;
+        }
+    }
+
+    async findAllUserRating(user_id: number, currentUserId: number, currentUserRole: UserRole) {
+        try {
+            if (user_id !== currentUserId && currentUserRole !== UserRole.ADMIN) {
+                throw new ForbiddenException("you are not allowed to fetch resource");
+            }
+            const userRatings = await this.prisma.rating.findMany({
+                where: { user_id: user_id },
+                include: {
+                    movie: true
+                }
+            });
+
+
+            return { data: userRatings }
+        } catch (error) {
+            throw error
         }
     }
 }
