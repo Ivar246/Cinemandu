@@ -16,7 +16,7 @@ export class RatingController {
     constructor(private ratingService: RatingService) { }
 
     @HttpCode(HttpStatus.CREATED)
-    @Post('/movie/:movie_id')
+    @Post('/create/:movie_id')
     @ApiOperation({ description: "user rate movie" })
     @ApiResponse({ status: 200, description: "rating successfull" })
     createRating(@User('id') user_id: number,
