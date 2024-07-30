@@ -1,10 +1,7 @@
-import { Injectable, NotFoundException, BadRequestException, HttpException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AddMovieDto } from './dto';
-import { Audience, Format, Genre, Movie } from '@prisma/client';
-import { format } from 'path';
-import { create } from 'domain';
-import { ArtistService } from 'src/artist/artist.service';
+import { Audience, Format } from '@prisma/client';
 
 @Injectable()
 export class MovieService {
@@ -138,6 +135,10 @@ export class MovieService {
                 },
             });
 
+            if (movies.length === 0) throw new HttpException('No movies found', HttpStatus.NOT_FOUND);
+
+            const totalMovies = await this.prisma.movie.count();
+
             const filteredMovie = movies.map(movie => {
                 return {
                     ...movie,
@@ -154,15 +155,16 @@ export class MovieService {
                     producers: movie.MovieArtist.filter(ma => ma.MovieArtistRole.some(mar => mar.role.role_name === "producer"))
                         .map(ma => ma.artist.artist_name),
                     directors: movie.MovieArtist.filter(ma => ma.MovieArtistRole.some(mar => mar.role.role_name === "director"))
-                        .map(ma => ma.artist.artist_name)
+                        .map(ma => ma.artist.artist_name),
+                    pagination: {
+                        totalMovies: totalMovies
+                    }
                 }
             });
 
-            if (movies.length === 0) throw new NotFoundException('No movies found');
 
             return { data: filteredMovie, message: "Movies fetched successfully." };
         } catch (error) {
-            console.log(error)
             throw error;
         }
     }
@@ -188,6 +190,8 @@ export class MovieService {
             });
 
             if (!movie) throw new NotFoundException('movie with the id not found.')
+
+
             const filteredData = {
                 ...movie,
                 genre: movie.genre.map(g => ({ id: g.id, genre_name: g.genre_name })),
@@ -225,5 +229,7 @@ export class MovieService {
             throw error;
         }
     }
+
+
 }
 

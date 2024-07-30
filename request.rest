@@ -38,6 +38,7 @@ DELETE http://localhost:3000/role/delete/15
 POST http://localhost:3000/artist/create
 Content-Type: application/json
 
+
 {
     "artist_name":"Tom hundered",
     "DOB":"1970-1-5",
@@ -98,3 +99,39 @@ DELETE http://localhost:3000/movie/delete/1
 ### user rate a movie 
 POST http://localhost:3000/rating/create
 
+### delete image by id
+DELETE  http://localhost:3000/gallery/image/1
+
+### create rating
+POST http://localhost:3000/rating/create/movie/111
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJpdmFyc3RoYUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyMjE3MjI0NCwiZXhwIjoxNzIzMDM2MjQ0fQ.-F5O1Z1NG4f0QoSmxUrmRtaQlKLLksNcRzFUQzRBQ5E
+
+{
+    "rate":5
+}
+
+### update user rating on movie
+PUT  http://localhost:3000/rating/update/1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJpdmFyc3RoYUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyMjE3MjI0NCwiZXhwIjoxNzIzMDM2MjQ0fQ.-F5O1Z1NG4f0QoSmxUrmRtaQlKLLksNcRzFUQzRBQ5E
+
+{
+    "rate":7
+}
+
+### get all user ratings
+GET http://localhost:3000/rate/user/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJpdmFyc3RoYUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyMjE3MjI0NCwiZXhwIjoxNzIzMDM2MjQ0fQ.-F5O1Z1NG4f0QoSmxUrmRtaQlKLLksNcRzFUQzRBQ5E
+
+
+### add movie to user watchlist
+POST  http://localhost:3000/user/watchlist/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJpdmFyc3RoYUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyMjE3MjI0NCwiZXhwIjoxNzIzMDM2MjQ0fQ.-F5O1Z1NG4f0QoSmxUrmRtaQlKLLksNcRzFUQzRBQ5E
+Content-Type: application/json
+
+{
+    "movie_id":2
+}
+
+###

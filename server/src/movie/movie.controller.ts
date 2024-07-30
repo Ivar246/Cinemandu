@@ -4,37 +4,28 @@ import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import { AddMovieDto } from './dto';
-import { LoggerService } from '../logger/logger.service';
 import {
     ApiBearerAuth,
     ApiOperation,
     ApiResponse,
     ApiTags
 } from '@nestjs/swagger';
+import { multerOptions } from 'src/utils';
+import { Public } from 'src/common/decorator';
 
 @ApiTags("movies")
 @Controller('movie')
+@Public()
 export class MovieController {
 
     constructor(private movieService: MovieService) { }
-    private logger = new LoggerService(MovieController.name)
 
 
     @UseInterceptors(
         FileInterceptor('poster', {
-            storage: diskStorage({
-                destination: './uploads/posters',
-                filename: (req, file, cb) => {
-                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-                    cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
-                },
-            }),
-            fileFilter: (req, file, cb) => {
-                if (!file.mimetype.startsWith('image')) {
-                    return cb(new Error('Only image files are allowed!'), false);
-                }
-                cb(null, true);
-            }
+            storage: multerOptions.getStorage("uploads/moviePoster"),
+            fileFilter: multerOptions.fileFilter,
+            limits: multerOptions.limits
         }),
     )
     @Post("/create")
@@ -51,7 +42,6 @@ export class MovieController {
     @ApiOperation({ summary: 'fetching all movies' })
     @ApiResponse({ status: 200, description: 'movies fetched successfully.' })
     getMovies(@Ip() ip: string) {
-        this.logger.log(`fetching movies from ${ip}`, MovieController.name);
         return this.movieService.getMovies();
     }
 
@@ -70,20 +60,5 @@ export class MovieController {
     @ApiResponse({ status: 200, description: 'movie deleted successfully.' })
     deleteMovie(@Param('id', ParseIntPipe) movie_id: number) {
         return this.movieService.deleteMovie(movie_id);
-    }
-
-    @UseInterceptors(FilesInterceptor("movie_gallery", 10, {
-        storage: diskStorage({
-            destination: './uploads/movieGallery',
-            filename: (req, file, cb) => {
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-                cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
-            },
-        }),
-    }))
-    @Post("/uploadImageGallery")
-    uploadImageGallery(@UploadedFiles() files: Array<Express.Multer.File>) {
-        console.log(files)
-
     }
 }

@@ -42,12 +42,10 @@ export class GlobalExceptionsFilter extends BaseExceptionFilter {
             myResponseObj.statusCode = HttpStatus.BAD_REQUEST;
             myResponseObj.response = exception.message;
         }
-
         else {
             myResponseObj.statusCode = HttpStatus.INTERNAL_SERVER_ERROR
             myResponseObj.response = 'Internal Server Error'
         }
-
         response
             .status(myResponseObj.statusCode)
             .json(myResponseObj)

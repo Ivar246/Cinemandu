@@ -4,6 +4,7 @@ import { LoginDto, SignupDto } from './dto';
 import * as bcrypt from "bcrypt"
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { access } from 'fs';
 
 @Injectable()
 export class AuthService {
@@ -25,11 +26,12 @@ export class AuthService {
 
             const payload = {
                 id: newUser.id,
-                email: newUser.email
+                email: newUser.email,
+                role: newUser.user_role
             };
 
             const access_token = await this.jwt.signAsync(payload, { secret: this.config.get("ACCESS_SECRET"), expiresIn: '10d' })
-            return { access_token: access_token };
+            return { access_token: access_token, message: "sign up successfull" };
 
         }
         catch (error) {
@@ -46,9 +48,13 @@ export class AuthService {
 
         const payload = {
             id: user.id,
-            email: user.email
+            email: user.email,
+            role: user.user_role
         };
 
         const access_token = await this.jwt.signAsync(payload, { secret: this.config.get("ACCESS_SECRET"), expiresIn: "10d" })
+
+        return { access_token, message: "user logged in successfull" };
     }
+
 }

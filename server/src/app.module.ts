@@ -12,6 +12,7 @@ import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler"
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guard';
 import { GalleryModule } from './gallery/gallery.module';
+import { WatchlistModule } from './watchlist/watchlists.module';
 
 @Module({
   imports: [ThrottlerModule.forRoot([{
@@ -27,7 +28,8 @@ import { GalleryModule } from './gallery/gallery.module';
     GenreModule,
     LoggerModule,
     RatingModule,
-    GalleryModule],
+    GalleryModule,
+    WatchlistModule],
   providers: [
     {
       provide: APP_GUARD,
