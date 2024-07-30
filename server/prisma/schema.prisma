@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
+  id            Int         @id @default(autoincrement())
   username      String
   profile_url   String?
-  email         String   @unique
+  email         String      @unique
   password_hash String
-  user_role     UserRole @default(USER)
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+  user_role     UserRole    @default(USER)
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
   Rating        Rating[]
+  WatchList     WatchList[]
 
   @@map("user")
 }
@@ -95,6 +96,7 @@ model Movie {
   created_at       DateTime      @default(now())
   updated_at       DateTime      @updatedAt
   Rating           Rating[]
+  WatchList        WatchList[]
 
   @@unique([title, released_date])
   @@map("movie")
@@ -146,6 +148,18 @@ model Rating {
 
   @@unique([user_id, movie_id])
   @@map("rating")
+}
+
+model WatchList {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  user       User     @relation(fields: [user_id], references: [id])
+  movie_id   Int
+  movie      Movie    @relation(fields: [movie_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("watch_list")
 }
 
 enum Audience {
