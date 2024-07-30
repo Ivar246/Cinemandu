@@ -159,6 +159,7 @@ model WatchList {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+  @@unique([user_id, movie_id])
   @@map("watch_list")
 }
 
