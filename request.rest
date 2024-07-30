@@ -134,4 +134,6 @@ Content-Type: application/json
     "movie_id":2
 }
 
-###
+### fetch user watchlist 
+GET   http://localhost:3000/user/watchlist/fetchall/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJpdmFyc3RoYUBnbWFpbC5jb20iLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcyMjE3MjI0NCwiZXhwIjoxNzIzMDM2MjQ0fQ.-F5O1Z1NG4f0QoSmxUrmRtaQlKLLksNcRzFUQzRBQ5E

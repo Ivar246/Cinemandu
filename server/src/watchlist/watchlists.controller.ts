@@ -4,6 +4,7 @@ import { CreateWatchlistDto } from './dto/create-watchlist.dto';
 import { UpdateWatchlistDto } from './dto/update-watchlist.dto';
 import { User } from 'src/common/decorator';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserRole } from '@prisma/client';
 
 @ApiTags('watchlist')
 @Controller('user/watchlist')
@@ -20,10 +21,11 @@ export class WatchlistController {
 
   @Get("/fetchall/:user_id")
   @ApiOperation({ description: "fetching  all data in user watchlist" })
-  findAll(@Param("user_id", ParseIntPipe) user_id: number) {
-    return this.watchlistsService.findAll(user_id);
+  findAll(@Param("user_id", ParseIntPipe) user_id: number,
+    @User("id") currentUserId: number,
+    @User("user_role") currentUserRole: UserRole) {
+    return this.watchlistsService.findAll(user_id, currentUserId, currentUserRole);
   }
-
 
   @Delete('')
   @ApiOperation({ description: "remove user" })

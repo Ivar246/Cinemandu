@@ -3,6 +3,7 @@ import { CreateWatchlistDto } from './dto/create-watchlist.dto';
 import { UpdateWatchlistDto } from './dto/update-watchlist.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class WatchlistService {
@@ -29,8 +30,12 @@ export class WatchlistService {
     }
   }
 
-  async findAll(user_id: number) {
+  async findAll(user_id: number, currentUserId: number, currentUserRole: UserRole) {
+    console.log(user_id, typeof user_id, currentUserId, typeof currentUserId)
     try {
+      if (user_id !== currentUserId && currentUserRole !== UserRole.ADMIN)
+        throw new HttpException("forbidden", HttpStatus.FORBIDDEN);
+
       const userWatchlist = await this.prisma.watchList.findMany({
         where: {
           user_id: user_id,
