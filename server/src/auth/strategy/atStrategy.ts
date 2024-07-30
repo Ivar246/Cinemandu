@@ -22,7 +22,6 @@ export class AtStrategy extends PassportStrategy(Strategy, "access") {
         });
 
         delete currentUser['password_hash'];
-        console.log(currentUser);
         return currentUser;
 
     }
