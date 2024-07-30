@@ -27,9 +27,10 @@ export class WatchlistController {
     return this.watchlistsService.findAll(user_id, currentUserId, currentUserRole);
   }
 
-  @Delete('')
-  @ApiOperation({ description: "remove user" })
-  remove(@Param('id') id: string) {
-    return this.watchlistsService.remove(+id);
+  @Delete('/remove/:movie_id')
+  @ApiOperation({ description: "remove movie from user watchlist" })
+  remove(@User('id') currentUserId: number,
+    @Param('movie_id', ParseIntPipe) moive_id: number) {
+    return this.watchlistsService.remove(currentUserId, moive_id);
   }
 }

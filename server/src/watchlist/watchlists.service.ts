@@ -67,10 +67,22 @@ export class WatchlistService {
     }
   }
 
-  remove(id: number) {
+  async remove(currentUserId: number, movie_id: number) {
     try {
-
+      const removedWatchlist = await this.prisma.watchList.delete({
+        where: {
+          user_id_movie_id: {
+            user_id: currentUserId,
+            movie_id: movie_id
+          }
+        }
+      })
+      return { data: { removedWatchlist } }
     } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError)
+        if (error.code === "P2025")
+          throw new HttpException(`${error.meta.modelName}, ${error.meta.cause}`, HttpStatus.NOT_FOUND)
+      console.log(error)
       throw error;
     }
   }
