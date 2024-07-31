@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from "class-validator"
 
-export class CreateReviewDto {
+export class UpdateReviewDto {
     @IsNotEmpty()
     @IsString()
     heading: string
@@ -8,8 +8,4 @@ export class CreateReviewDto {
     @IsString()
     @IsNotEmpty()
     text: string
-
-    @IsNotEmpty()
-    @IsNumber()
-    movie_id: number
 }
