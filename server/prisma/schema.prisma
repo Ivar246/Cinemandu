@@ -24,6 +24,7 @@ model User {
   updated_at    DateTime    @updatedAt
   Rating        Rating[]
   WatchList     WatchList[]
+  Review        Review[]
 
   @@map("user")
 }
@@ -97,6 +98,7 @@ model Movie {
   updated_at       DateTime      @updatedAt
   Rating           Rating[]
   WatchList        WatchList[]
+  Review           Review[]
 
   @@unique([title, released_date])
   @@map("movie")
@@ -161,6 +163,21 @@ model WatchList {
 
   @@unique([user_id, movie_id])
   @@map("watch_list")
+}
+
+model Review {
+  id         Int      @id @default(autoincrement())
+  heading    String
+  text       String
+  user_id    Int
+  movie_id   Int
+  user       User     @relation(fields: [user_id], references: [id])
+  movie      Movie    @relation(fields: [movie_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([user_id, movie_id])
+  @@map("review")
 }
 
 enum Audience {
