@@ -13,6 +13,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guard';
 import { GalleryModule } from './gallery/gallery.module';
 import { WatchlistModule } from './watchlist/watchlists.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [ThrottlerModule.forRoot([{
@@ -29,7 +30,8 @@ import { WatchlistModule } from './watchlist/watchlists.module';
     LoggerModule,
     RatingModule,
     GalleryModule,
-    WatchlistModule],
+    WatchlistModule,
+    ReviewModule],
   providers: [
     {
       provide: APP_GUARD,
