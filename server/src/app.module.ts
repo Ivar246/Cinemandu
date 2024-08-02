@@ -8,12 +8,14 @@ import { MovieModule } from './movie/movie.module';
 import { GenreModule } from './genre/genre.module';
 import { LoggerModule } from './logger/logger.module';
 import { RatingModule } from './rating/rating.module';
-import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler"
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from './common/guard';
 import { GalleryModule } from './gallery/gallery.module';
 import { WatchlistModule } from './watchlist/watchlists.module';
 import { ReviewModule } from './review/review.module';
+import { MailerModule } from './mailer/mailer.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [ThrottlerModule.forRoot([{
@@ -31,7 +33,9 @@ import { ReviewModule } from './review/review.module';
     RatingModule,
     GalleryModule,
     WatchlistModule,
-    ReviewModule],
+    ReviewModule,
+    MailerModule,
+    MailModule],
   providers: [
     {
       provide: APP_GUARD,
