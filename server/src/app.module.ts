@@ -16,6 +16,7 @@ import { WatchlistModule } from './watchlist/watchlists.module';
 import { ReviewModule } from './review/review.module';
 import { MailerModule } from './mailer/mailer.module';
 import { MailModule } from './mail/mail.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [ThrottlerModule.forRoot([{
@@ -35,7 +36,8 @@ import { MailModule } from './mail/mail.module';
     WatchlistModule,
     ReviewModule,
     MailerModule,
-    MailModule],
+    MailModule,
+    UserModule],
   providers: [
     {
       provide: APP_GUARD,

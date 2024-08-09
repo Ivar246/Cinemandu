@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  web:
+    container_name: cinemandu
+    build:
+      context: .
+    volumes:
+      - /app
+      - /app/node_modules
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+    command: pnpm run start:dev
+    depends_on:
+      - rabbitmq
+
+    rabbitmq:
+      image: rabbitmq:3.9-management
+      container_name: rabbitmq-dev
+      restart: always
+      hostname: rabbitmq
+      ports:
+        - 5672:5672
+        - 15672:15672
+      volumes:
+        - rabbitmq_data:/var/lib/rabbitmq
+
+volumes:
+  - rabbitmq_data
