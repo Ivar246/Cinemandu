@@ -196,3 +196,8 @@ enum UserRole {
   USER
   ADMIN
 }
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
